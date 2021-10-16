@@ -9,6 +9,6 @@ A front-end for an email client that makes API calls to send and receive emails.
 - **Network**  
 A Twitter-like social network website for making posts and following users.
 - **Wiki**  
-A Wikipedia-like online encyclopedia using Django.
+A Wikipedia-like online encyclopedia.
 - **Search**  
 A simple front-end for Google Search, Google Image Search, and Google Advanced Search.
