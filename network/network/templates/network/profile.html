@@ -1,0 +1,51 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <div class="container text-center">
+      <h2>{{ current_user.username }}</h2>
+      <p>Follower: {{ follower }}</p>
+      <p>Follows: {{ followed }}</p>
+      {% if current_user != user %}
+      <form action="{% url 'follow' current_user.username %}" method="post">
+        <div class="form-group">
+        {% csrf_token %}
+        {% if bool %}
+          <input class="btn btn-primary" type="submit" value="Follow">
+        {% else %}
+          <input class="btn btn-primary" type="submit" value="Unfollow">
+        {% endif %}
+        </div>
+      </form>
+      {% endif %}
+    </div>
+    {% for post in posts %}
+        <div class="container">
+            <h3><a href="{% url 'profile' post.owner.username %}">{{ post.owner.username }}</a></h3>
+            <div id="{{ post.id }}">
+                {% if post.owner == user %}
+                    <button class="btn btn-outline-primary btn-sm edit-button">Edit</button>
+                {% endif %}
+                <p>{{ post.body }}</p>
+            </div>
+            <p>{{ post.timestamp }}</p>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOoAAADYCAMAAADS+I/aAAAAk1BMVEXjChf////iAADjABHjAA/iAArjBBT63+D74uP86On75OX98PH519jiAAf97/D86uv0trjxnqH409T++fnkEx7rb3Pten7nRUv629znP0XqZ2vpWl7+9fXlJC3xoqT1vL7mLzf2w8Xuh4rpXWHxoKLpVFnwk5bra2/tf4L3y83kGiTlJzDpVlrzq63vi47nQUfmNTzhL9bEAAAHw0lEQVR4nO3da3uiOhAA4CQgW2tVFC/Vqq117brVdvv/f90JFxWRSxIyAYYzH/vspnmZJKQBEkJLh+eteHjlC7qNwdgdHf6cftaTyYRMjovd9H3z+tRTL5Ao/0/v2R3Ndm8OO4d9PM1G7pMGc9d9n4dl9m3HIX44lt0PftI5fb8OlEpVoz5/TY+3VeGVcaxO8LP1cjNWKjWInjslvuhcbDIc/5esD1v5KypP7X7tfJCVURVCLP/y7ze/pEvmjXbjZzNLGfsV/F+9uJJaSerjxxtPZXFdCL/2n9/PcoW73GkXFx0Fv6DLrUzxMlTvayFTF37pj6OVaOHdd95qhcs+a4n4L5CgPsxknGHY/MoL9dvnnUi7vQ8+KM6Gmqnjk1pd+BDzb1sI3bO+StnRL5iKYcWo43mJutjsmIvt7qRbbhI7E2nGItSHU8m62GyR2Yy9Q4mreMWOdFC9mYa62GyZft93+dCiIRy2LhwTCqku01IXfuF/3xe+2qsNAClhs1k5ak9fXRz28wB0GcNgJD+x+VRXQ9u9RifRo5baLmMYFvtWpk4114Ww/XUy1/3UmdKo/HnOZDGH2l0D1IWdG9mr9HxEqPxO9mQ0m7oFqYvFvoLSP3Q3mEv5rjR1BFQXwg7U7xowhfvlZ91is6gzwLq80Be40qNrKU7dQdalr3Vcvw82laDuIaXwwf4IUxsuzchrGrXx0vT+mkJdNl+aOg7fUw8YpNz6Wkjd4JDyvy6SS5ZJ6l8kUj5vcrxc6hBqjlRBsH0u9a3cykq9gn3kUAGng1UEe8qkbnFJiTXJonqIOmoYNzOJOBXF3OE24k04RsXWfP2w31Kpk+zniM2NaNHjlvqBMKn+pMm7ow5QSnla3++ogKs91QbrJaiPWKXk8oDjTF3CLvdUGWxwQ8Wb1GtvJch7KrkOwiG1h1jK07qJUXHeU89hrWNUC9s8/zbY3wsV4+w3HuGycEDd4b3ThMHOVA95UqOVUp/6hZ+6jKgvmNbOUsNhIRV/+w3HYIJ//PXDf/eFoHlIkxv2T0BdY1xoSQZbcSrW5Yfb4J2VtKKrBg81CP1uBbW/49Q9+ruqHw7hVJHvKxAEWxHcf5Vfgz2TcVuoW/LaFuqGYHnNoyjYB3lvCbU/JVPsKxBRdJbkBeIF5xqGPSeLNkz2eThv5NiOGQRxPsmk6jqYitZA/6fijPb0VedI1i0Zga0F+WkJ1X4h+5bMlvgc+E9L5sDsQNqw4O0H+01GbaG6xG0LddyetaUBacdzDP8JK6Ho3mJPDXvOqfNW3FjZgVPbsY7GXE5txxDMHjkV80ujl3BI8NR80oJxyf8km+B+QfYc/m4RhLais/ov8BPsLwMHYS+it9H+ob+zBns9+VT8D+NYN6KinwYH7Td8H3iO/M2P8MO4gIp8DI4+yQjf3cf91030/VRIxb3AFO0QQdB/PEU6+5uvp06Il0jDT08uVMQrTOGdJvalI977DdsmqGjT2jkn9fpVMtYXSK/bJVyov3CmNfjCJkHF+Re6w3op1BXGKVN8p97YFhgIvxeLb/Zxs4fLP3QjE3vIoA6xpfV227ub/ZaQLUf05zSTSk+YrPHR957qWYjeIz1P89Op9AlPWu/2p0zuY4jmjhObJmVQsWx6xxZJWMqeoyiGps76fqv2lJ1kf5pvtZ2U80FSqN666asvNks7kCNtK2Tvs9kzRNtKPeAmdYPr3qTJVjt4QiNIpb0G5zVLmrUZ/aqxebVZ1vFMWUcMNNWaLc0+OGLVyDZs97OP3Mo+DqSJ1pyc5h7y0rw2nCvNPbqnadZ8af4pRc1qw5l3GRFqo+6vRdKiE8Wa04YLpYXnxDXFWiwtPhKvGfNhAanAQYdNsIpIRY6v7JG6W4WkQid11r2/iknFzl+tdxsWlAoeNVtnq6hU9ADh+vZXYanwWcl1tYpLxU/ArmcbttmjKEDisO86Wi0JqcwR7vVrw1JSqdPq62aVab2S1Jq1YbmcSlLpoEZ5lZVKUmnPqYtVWipLrU1/leynKtSatGGLJc9IB6DWwqoiVaDWoL/K91NFKh1UbFXKqRq14jasKFWj8rxW93GkqlSRSgdWVVZlqSq1Mqu6VJlKh5W0YevuWGADVDq0zVtL5LQMlQ6MW0tJy1CNW8u03pJUw224pLQclQ475qxlpSWpdGDMWq6faqAay2vpnJanGuqvGqTlqXTYh7fqkGqgGrBqkeqggvdXPVItVGCrJqkeKh0yOKsuqSYqoFWbVBcVbGyy2LOmGmqjAlkdfVJ9VJA2rFOqkQpg1dh6qVYq7Wq2as2pXqpmq2apXqpWq26pZqrG/qpdqpuqLa/6pdqpmqzOdZcZbaGdqsUKkFMIqgYrRE5BqKWtMFIQakkrkBSGWsoKJQWilrCCSaGoylY4KRiVPipZAaVwVKW8gtxPzwFHVcgrZE5BqdJWWCkoVdIKLIWlSlmhpcBUbhXdlsthY9iqQFOFrfBScCp9ELIakMJThfIK3k/9gKcKWE3k1Ai1sA2bkRqhFlgNSc1Qc62mpIaoOVZjUlPUTKs5qTFqhtWg1Bw11WpSapCaYjUqNUmlvxJWs1Kj1ITVsNQs9cZqWmqYGrM6yU2ZwcMw9WI1LzVOjazGWy+tgBpYq5BWQOVW23zrpZVQ+VyigpxS+h8+6HwAiO274wAAAABJRU5ErkJggg=="
+              class="like-button" name="{{ post.id }}" width="20px">
+              <span>{{ post.likes }}</span>
+        </div>
+    {% endfor %}
+    <div class="container text-center">
+            {% if posts.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ posts.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+            </span>
+
+            {% if posts.has_next %}
+                <a href="?page={{ posts.next_page_number }}">next</a>
+                <a href="?page={{ posts.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+    </div>
+{% endblock %}
