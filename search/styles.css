@@ -1,0 +1,33 @@
+h1, form, div, table, tr {
+  text-align: center;
+
+}
+
+table {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.search {
+  border-radius: 25px;
+  width: 300px;
+  height: 20px;
+  margin: 20px;
+}
+
+
+#navbar {
+  margin-bottom: 100px;
+  margin-top: 30px;
+  text-align: right;
+}
+
+#leftheading {
+  text-align: left;
+  color: red;
+}
+
+#advancedsubmit{
+  background-color: blue;
+  color: white;
+}
