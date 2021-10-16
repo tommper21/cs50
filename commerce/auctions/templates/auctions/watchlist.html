@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+      <h2>Watchlist</h2>
+      <hr>
+      {% for item in watchlist %}
+      <div style="white-space:nowrap">
+        <div style="display:inline-block">
+          <img src="{{ item.listing.image }}" alt="None" width="200px">
+        </div>
+        <div style="display:inline-block">
+          <h3><a href="{% url 'listing' item.listing.title %}">{{ item.listing.title }}</a></h3>
+          <h4>Price:{{ item.listing.price }}$</h4>
+          <p style="width:auto">{{ item.listing.description }}</p>
+        </div>
+      </div>
+        <hr>
+      {% endfor %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>Create</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'create' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control"  type="hidden" name="owner" value="{{ owner.username }}">
+        </div>
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="title" placeholder="Title">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="description" placeholder="Description">
+        </div>
+        <div class="form-group">
+            <select class="form-control" type="text" name="category" placeholder="Category">
+              {% for category in categories %}
+              <option value="{{ category.category }}">{{ category.category}}</option>
+              {% endfor %}
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="image" placeholder="Image URL">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="number" name="price" placeholder="Price" >
+        </div>
+        <input class="btn btn-primary" type="submit" value="Create">
+    </form>
+
+{% endblock %}

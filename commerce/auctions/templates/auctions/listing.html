@@ -1,0 +1,91 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+
+        <div style="display:inline-block; vertical-align:top">
+          <img src="{{ listing.image }}" alt="None" width="200px">
+        </div>
+        <div style="display:inline-block">
+          {% if listing.active %}
+            <span class="badge badge-primary">ACTIVE</span>
+          {% else %}
+            <span class="badge badge-danger">CLOSED</span>
+          {% endif %}
+          <h3><a href="{% url 'listing' listing.title %}">{{ listing.title }}</a></h3>
+          <h4>Price:{{ listing.price }}$</h4>
+          <div style="width:500px">
+          <p>{{ listing.description }}</p></div>
+          <h6>Owner: {{ listing.owner.username }}</h6>
+          <h6>Created: {{ listing.date }}</h6>
+
+          {% if no_bid %}
+          <p>No bid yet!</p>
+          {% else %}
+          <h4>Current Bid: {{ bid.bid }}$</h4>
+          <h5>From: {{ bid.user.username }}</h5>
+          {% endif %}
+          <form action="{% url 'listing' listing.title %}" method="post">
+            <div class="form-group">
+            {% csrf_token %}
+            {% if delete %}
+              <input class="btn btn-primary" type="submit" value="Delete from Watchlist">
+            {% else %}
+              <input class="btn btn-primary" type="submit" value="Add to Watchlist">
+            {% endif %}
+            </div>
+          </form>
+        </div>
+        <hr>
+        {% if listing.active %}
+          {% if user == listing.owner %}
+            <form action="{% url 'close' listing.title %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <input type="submit" class="btn btn-danger btn-block" value="Close">
+              </div>
+            </form>
+            {% else %}
+          <form action="{% url 'bid' listing.title %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="number" class="form-control" name="bid" placeholder=0>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-block" value="Place Bid">
+            </div>
+          </form>
+          {% endif %}
+          <hr>
+        {% else %}
+          {% if user == bid.user %}
+            <h4 style="text-align:center">You've won the auction!</h4>
+          {% endif %}
+
+        {% endif %}
+
+        {% if wrong_bid %}
+          {% if no_bid %}
+            <p>Your bid must be higher than {{ listing_price.price }}$</p>
+          {% else %}
+          <p>Your bid must be higher than {{ bid.bid }}$</p>
+          {% endif %}
+        {% endif %}
+        {% for comment in comments %}
+          <h6>Comment from {{ comment.user.username }}</h6>
+          <hr>
+          <p>{{ comment.comment }}</p>
+          <hr>
+
+        {% endfor %}
+
+
+        <form action="{% url 'comment' listing.title %}" method=post>
+          {% csrf_token %}
+          <div class="form-group">
+            <textarea class="form-control" name="comment" rows="3" placeholder="Write a comment."></textarea>
+          </div>
+           <button type="submit" class="btn btn-primary">Comment</button>
+        </form>
+{% endblock %}

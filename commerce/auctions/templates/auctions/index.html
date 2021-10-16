@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <hr>
+      {% for listing in listings %}
+      <div>
+        <div style="display:inline-block; vertical-align:top">
+          <img src="{{ listing.image }}" alt="None" width="200px">
+        </div>
+        <div style="display:inline-block">
+          <h3><a href="{% url 'listing' listing.title %}">{{ listing.title }}</a></h3>
+          <h4>Price:{{ listing.price }}$</h4>
+          <p style="width:500px">{{ listing.description }}</p>
+        </div>
+      </div>
+        <hr>
+      {% endfor %}
+{% endblock %}
